@@ -36,6 +36,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from '../environments/environment';
+import { ChefTaskCardComponent } from './components/chef-task-card/chef-task-card.component';
 
 const config: SocketIoConfig = { url: environment.API_URL, options: {} };
 
@@ -56,6 +57,7 @@ registerLocaleData(en);
     BaseOptionCardComponent,
     OverrideOptionCardComponent,
     OrderCardComponent,
+    ChefTaskCardComponent,
   ],
   imports: [
     BrowserModule,

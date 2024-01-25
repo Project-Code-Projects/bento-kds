@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { OrderItemInterface } from '../../interfaces/order.interface';
+import { OrderItemInterface } from '../../interfaces/chef-task/order.interface';
 import { IUser } from '../../interfaces/user.interface';
 
 @Injectable({

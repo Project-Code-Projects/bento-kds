@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { IUser } from '../../interfaces/user.interface';
 import { Observable } from 'rxjs';
 import { IRules } from '../../interfaces/rules.interface';
-import { OrderItemInterface } from '../../interfaces/order.interface';
+import { OrderItemInterface } from '../../interfaces/chef-task/order.interface';
 
 @Injectable({
   providedIn: 'root'

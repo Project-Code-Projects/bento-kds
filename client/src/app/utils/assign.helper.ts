@@ -1,5 +1,5 @@
 import { IChefQueue } from "../interfaces/chefQueue.interface";
-import { OrderItemInterface } from "../interfaces/order.interface";
+import { OrderItemInterface } from "../interfaces/chef-task/order.interface";
 import { IUser } from "../interfaces/user.interface";
 
 export function assignChefToPendingOrders (pendingOrders: OrderItemInterface[], preparingOrders: OrderItemInterface[], chefs: IUser[]) {

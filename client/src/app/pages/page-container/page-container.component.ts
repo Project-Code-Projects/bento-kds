@@ -7,6 +7,7 @@ import { LoadingService } from '../../services/loading/loading.service';
 import { OrdersService } from '../../services/orders/orders.service';
 import { SocketService } from '../../services/socket/socket.service';
 import { ChefService } from '../../services/chef/chef.service';
+import { ChefTaskService } from '../../services/chef-task/chef-task.service';
 
 @Component({
   selector: 'app-page-container',
@@ -26,6 +27,7 @@ export class PageContainerComponent implements OnInit {
     private loadingService: LoadingService,
     private chefService: ChefService,
     private socket: SocketService,
+    private chefTaskService: ChefTaskService
     ){
 
   }
@@ -60,8 +62,13 @@ export class PageContainerComponent implements OnInit {
   fetchOrders () {
     this.loadingService.setOrderLoading(true);
     this.api.getOrders().subscribe(data => {
-      console.log(data)
       this.ordersService.orders = data.data;
+      const tasks = data.data.flatMap(order => {
+        const items = order.items.map(item => ({ item, order }));
+        return items;
+      })
+
+      this.chefTaskService.chefTasks = tasks;
       this.loadingService.setOrderLoading(false);
     })
   }

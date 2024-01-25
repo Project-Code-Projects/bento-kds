@@ -1,4 +1,4 @@
-import { OrderItemInterface } from "./order.interface";
+import { OrderItemInterface } from "./chef-task/order.interface";
 import { IUser } from "./user.interface";
 
 export interface IChefQueue {

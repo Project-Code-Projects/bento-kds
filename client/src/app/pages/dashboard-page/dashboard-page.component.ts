@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { OrdersService } from '../../services/orders/orders.service';
-import { OrderItemInterface } from '../../interfaces/order.interface';
+import { OrderItemInterface } from '../../interfaces/chef-task/order.interface';
 import { IUser } from '../../interfaces/user.interface';
 import { LoadingService } from '../../services/loading/loading.service';
 import { ChefService } from '../../services/chef/chef.service';
-import { ItemInterface } from '../../interfaces/item.interface';
+import { ItemInterface } from '../../interfaces/chef-task/item.interface';
 
 @Component({
   selector: 'app-dashboard-page',

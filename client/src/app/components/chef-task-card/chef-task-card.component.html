@@ -1,0 +1,33 @@
+<nz-spin [nzSpinning]="loading">
+  <div class="order-card">
+      <div class="order-info">
+        <h2 class="text-sm"><strong>Item ID #{{ task.item._id }}</strong></h2>
+          <div class="my-5">
+            <p><strong>{{task.item.item.itemQuantity}} x {{task.item.item.itemName}}</strong></p>
+  
+            @if (task.item.item.chosenOptions) {
+              @for (option of task.item.item.chosenOptions.add; track $index) {
+                <p class="ml-3">Add: {{option.ingredientName}}</p>
+              }
+      
+              @for (option of task.item.item.chosenOptions.no; track $index) {
+                <p class="ml-3">No: {{option.ingredientName}}</p>
+              }
+            }
+  
+            @if (task.item.item.optionalNotes) {
+              <p class="notes ml-3">Notes: {{task.item.item.optionalNotes}}</p>
+            }
+          </div>
+  
+        @if (task.item.chef) {
+          <p class="chef-name" [ngStyle]="{ backgroundColor: getChefColor() }">
+            {{task.item.chef.employeeInformation.name}}
+          </p>
+        }
+  
+      </div>
+      <div class="status-btn">{{task.item.status}}</div>
+    </div>
+</nz-spin>
+  

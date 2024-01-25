@@ -1,7 +1,7 @@
 
 <nz-spin [nzSpinning]="loading" nzTip="Loading orders..." >
   <h1>Kitchen Display</h1>
-  <div class="drag-drop-layout">
+  <!-- <div class="drag-drop-layout">
    
     <div class="drag-drop-column">
       <h3 class="center-text">Pending Orders</h3>
@@ -12,7 +12,7 @@
   
     
     <div class="drag-drop-column">
-      <h3 class="center-text">Being Preparing</h3>
+      <h3 class="center-text">Being Prepared</h3>
       <div cdkDropList #preparingList="cdkDropList" [cdkDropListData]="preparing" [cdkDropListConnectedTo]="[pendingList, readyList]" class="drop-list" (cdkDropListDropped)="onDrop($event, 'preparing')">
         <app-order-card [order]="order" *ngFor="let order of preparing order" cdkDrag [cdkDragDisabled]="isOrderLoading(order)" [loading]="isOrderLoading(order)"></app-order-card>
       </div>
@@ -30,6 +30,40 @@
     <div class="drag-drop-column">
       <h3 class="center-text">Served/Delivered</h3>
       </div>
-    </div>
+    </div> -->
+
+    <div class="drag-drop-layout">
+   
+      <div class="drag-drop-column">
+        <h3 class="center-text">Pending Orders</h3>
+        <div cdkDropList #pendingList="cdkDropList" [cdkDropListData]="pendingTasks" [cdkDropListConnectedTo]="[preparingList]" class="drop-list" (cdkDropListDropped)="onTaskDrop($event, 'pending')">
+          <!-- <app-order-card [order]="order" *ngFor="let task of pendingTasks" cdkDrag [cdkDragDisabled]="isOrderLoading(order)" [loading]="isOrderLoading(order)"></app-order-card> -->
+          <app-chef-task-card [task]="task"  *ngFor="let task of pendingTasks" cdkDrag [loading]="false"></app-chef-task-card>
+        </div>
+      </div>
+    
+      
+      <div class="drag-drop-column">
+        <h3 class="center-text">Being Prepared</h3>
+        <div cdkDropList #preparingList="cdkDropList" [cdkDropListData]="preparingTasks" [cdkDropListConnectedTo]="[pendingList, readyList]" class="drop-list" (cdkDropListDropped)="onTaskDrop($event, 'preparing')">
+          <!-- <app-order-card [order]="order" *ngFor="let order of preparing order" cdkDrag [cdkDragDisabled]="isOrderLoading(order)" [loading]="isOrderLoading(order)"></app-order-card> -->
+          <app-chef-task-card [task]="task"  *ngFor="let task of preparingTasks" cdkDrag [loading]="false"></app-chef-task-card>
+        </div>
+      </div>
+    
+      
+      <div class="drag-drop-column">
+        <h3 class="center-text">Ready To Serve</h3>
+        <div cdkDropList #readyList="cdkDropList" [cdkDropListData]="readyTasks" [cdkDropListConnectedTo]="[preparingList, readyList]" class="drop-list" (cdkDropListDropped)="onTaskDrop($event, 'ready')">
+          <!-- <app-order-card [order]="order" *ngFor="let order of ready order" cdkDrag [cdkDragDisabled]="isOrderLoading(order)" [loading]="isOrderLoading(order)"></app-order-card> -->
+          <app-chef-task-card [task]="task"  *ngFor="let task of readyTasks" cdkDrag [loading]="false"></app-chef-task-card>
+        </div>
+      </div>
+    
+      
+      <div class="drag-drop-column">
+        <h3 class="center-text">Served/Delivered</h3>
+        </div>
+      </div>
  
 </nz-spin>

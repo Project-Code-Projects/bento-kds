@@ -1,5 +1,5 @@
 import { IBaseRule } from '../interfaces/baseRule.interface';
-import { OrderItemInterface } from '../interfaces/order.interface';
+import { OrderItemInterface } from '../interfaces/chef-task/order.interface';
 import { IOverrideRule } from '../interfaces/overrideRule.interface';
 import { IRules } from '../interfaces/rules.interface';
 

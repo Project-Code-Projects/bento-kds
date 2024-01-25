@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { OrderItemInterface } from '../../interfaces/order.interface';
+import { OrderItemInterface } from '../../interfaces/chef-task/order.interface';
 import { stringToHexColor } from '../../utils/color.helper';
 
 @Component({
