@@ -1,3 +1,13 @@
+/**
+ * Converts a string to a hexadecimal color value.
+ * @param {string} input - The input string to convert. 
+ * @returns {string} The hexadecimal color value.
+ * @description
+ - Hashes the input string to generate a numeric value.
+- Ensures the value is positive.
+- Converts the numeric value to a hexadecimal color string prefixed with #.
+- Pads the hexadecimal string to length 6 with leading 0s.
+*/
 export function stringToHexColor(input: string): string {
   // Simple hash function to convert string to a numeric value
   let hash = 0;

@@ -1,7 +1,7 @@
 
 <nz-spin [nzSpinning]="loading" nzTip="Loading orders..." >
   <h1>Kitchen Display</h1>
-  <div class="drag-drop-layout">
+  <!-- <div class="drag-drop-layout">
    
     <div class="drag-drop-column">
       <h3 class="center-text">Pending Orders</h3>
@@ -59,6 +59,62 @@
           [order]="order" 
           [loading]="false">
         </app-order-card>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="drag-drop-layout">
+   
+    <div class="drag-drop-column">
+      <h3 class="center-text">Pending Orders</h3>
+      <div cdkDropList #pendingList="cdkDropList" [cdkDropListData]="pendingTasks" [cdkDropListConnectedTo]="[preparingList]" class="drop-list" (cdkDropListDropped)="onDrop($event, 'pending')">
+        <app-task-card 
+          *ngFor="let task of pendingTasks" 
+          [chefTask]="task" 
+          cdkDrag
+          (cdkDragStarted)="onDragStart()"
+          (cdkDragEnded)="onDragEnd()">
+        </app-task-card>
+      </div>
+    </div>
+  
+    
+    <div class="drag-drop-column">
+      <h3 class="center-text">Being Prepared</h3>
+      <div cdkDropList #preparingList="cdkDropList" [cdkDropListData]="preparingTasks" [cdkDropListConnectedTo]="[pendingList, readyList]" class="drop-list" (cdkDropListDropped)="onDrop($event, 'preparing')">
+        <app-task-card 
+          *ngFor="let task of preparingTasks" 
+          [chefTask]="task" 
+          cdkDrag
+          (cdkDragStarted)="onDragStart()"
+          (cdkDragEnded)="onDragEnd()">
+        </app-task-card>
+      </div>
+    </div>
+  
+    
+    <div class="drag-drop-column">
+      <h3 class="center-text">Ready To Serve</h3>
+      <div cdkDropList #readyList="cdkDropList" [cdkDropListData]="readyTasks" [cdkDropListConnectedTo]="[preparingList]" class="drop-list" (cdkDropListDropped)="onDrop($event, 'ready')">
+        <app-task-card 
+          *ngFor="let task of readyTasks"
+          [chefTask]="task" 
+          cdkDrag
+          (cdkDragStarted)="onDragStart()"
+          (cdkDragEnded)="onDragEnd()">
+        </app-task-card>
+      </div>
+    </div>
+  
+    
+    <div class="drag-drop-column">
+      <h3 class="center-text">Served/Delivered</h3>
+      <div class="drop-list">
+        <app-task-card 
+          *ngFor="let task of servedTasks" 
+          [chefTask]="task" 
+          [loading]="false">
+        </app-task-card>
       </div>
     </div>
   </div>

@@ -13,6 +13,8 @@ import { ApiService } from '../../services/api/api.service';
 import { IUser } from '../../interfaces/user.interface';
 import { ChefService } from '../../services/chef/chef.service';
 import { assignChefToPendingOrders } from '../../utils/assign.helper';
+import { ChefTaskInterface } from '../../interfaces/chefTask.interface';
+import { ChefTaskService } from '../../services/chef-task/chef-task.service';
 
 @Component({
   selector: 'app-display-page',
@@ -31,9 +33,17 @@ export class DisplayPageComponent implements OnInit {
   loading: boolean = false;
   dragging: boolean = false;
 
+  // Tasks
+  pendingTasks: ChefTaskInterface[] = [];
+  preparingTasks: ChefTaskInterface[] = [];
+  readyTasks: ChefTaskInterface[] = [];
+  servedTasks: ChefTaskInterface[] = [];
+  loadingTasks: ChefTaskInterface[] = [];
+
   // Constructor
   constructor(
     private orderService: OrdersService,
+    private chefTaskService: ChefTaskService,
     private loadingService: LoadingService,
     private ruleService: RuleService,
     private api: ApiService,
@@ -44,12 +54,14 @@ export class DisplayPageComponent implements OnInit {
   
     this.chefs = this.chefService.chefs;
     this.setOrders(this.orderService.orders);
+    this.setTasks(this.chefTaskService.tasks);
     this.loading = this.loadingService.orderLoading;
     this.loadingService.orderLoadingEvent.subscribe(value => {
       this.loading = value;
       if (!value) {
         this.chefs = this.chefService.chefs;
         this.setOrders(this.orderService.orders);
+        this.setTasks(this.chefTaskService.tasks);
       }
     })
 
@@ -86,7 +98,14 @@ export class DisplayPageComponent implements OnInit {
     this.preparing = orders.filter((item) => item.status === 'preparing');
     this.sortAndAssignPendingOrders(orders);
     this.ready = orders.filter((item) => item.status === 'ready');
-    
+    this.served = orders.filter(item => item.status === 'served' || item.status === 'complete');
+  }
+
+  setTasks(tasks: ChefTaskInterface[]) {
+    this.pendingTasks = tasks.filter(item => !item.task.status || item.task.status === 'pending');
+    this.preparingTasks = tasks.filter(item => item.task.status === 'preparing');
+    this.readyTasks = tasks.filter(item => item.task.status === 'ready');
+    this.servedTasks = tasks.filter(item => item.task.status === 'served' || item.task.status === 'complete');
   }
 
   sortAndAssignPendingOrders(orders: OrderItemInterface[]) {
@@ -95,7 +114,56 @@ export class DisplayPageComponent implements OnInit {
     this.pending = assignChefToPendingOrders([...sortedOrders], [...preparingOrders], this.chefs);
   }
 
-  onDrop(event: CdkDragDrop<OrderItemInterface[]>, targetList: "pending" | "preparing" | "ready") {
+  // onDrop(event: CdkDragDrop<OrderItemInterface[]>, targetList: "pending" | "preparing" | "ready") {
+  //   if (event.previousContainer === event.container) {
+  //     moveItemInArray(
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex
+  //     );
+  //   } else {
+  //     transferArrayItem(
+  //       event.previousContainer.data,
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex
+  //     );
+
+  //     const order = event.container.data[event.currentIndex];
+  //     console.log(order)
+  //     order.status = targetList;
+
+  //     if(targetList === "pending" || event.previousContainer.id === "cdk-drop-list-0") {
+  //       this.sortAndAssignPendingOrders(this.orderService.orders);
+  //     }
+
+  //     if(event.previousContainer.id === "cdk-drop-list-0" && order.chef) {
+  //       this.api.addChefToOrder(order._id, order.chef).subscribe(() =>{});
+  //     }
+
+  //     this.loadingOrders.push(order);
+  //     this.api.updateOrderStatus(order, targetList).subscribe({
+  //       next: () => {
+  //         this.orderService.emitOrderStatusChange(order);
+  //         this.loadingOrders = this.loadingOrders.filter(item => item._id !== order._id);
+  //         if (targetList === "ready") this.checkServedOnTime(order);
+  //       },
+  //       error: (error) => {
+  //         this.loadingOrders = this.loadingOrders.filter(item => item._id !== order._id);
+  //         console.log(error)
+
+  //         transferArrayItem(
+  //           event.container.data,
+  //           event.previousContainer.data,
+  //           event.currentIndex,
+  //           event.previousIndex
+  //         );
+  //       }
+  //     });
+  //   }
+  // }
+
+  onDrop(event: CdkDragDrop<ChefTaskInterface[]>, targetList: "pending" | "preparing" | "ready") {
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -110,37 +178,37 @@ export class DisplayPageComponent implements OnInit {
         event.currentIndex
       );
 
-      const order = event.container.data[event.currentIndex];
-      console.log(order)
-      order.status = targetList;
+      const chefTask = event.container.data[event.currentIndex];
+      console.log(chefTask)
+      chefTask.task.status = targetList;
 
-      if(targetList === "pending" || event.previousContainer.id === "cdk-drop-list-0") {
-        this.sortAndAssignPendingOrders(this.orderService.orders);
-      }
+      // if(targetList === "pending" || event.previousContainer.id === "cdk-drop-list-0") {
+      //   this.sortAndAssignPendingOrders(this.orderService.orders);
+      // }
 
-      if(event.previousContainer.id === "cdk-drop-list-0" && order.chef) {
-        this.api.addChefToOrder(order._id, order.chef).subscribe(() =>{});
-      }
+      // if(event.previousContainer.id === "cdk-drop-list-0" && order.chef) {
+      //   this.api.addChefToOrder(order._id, order.chef).subscribe(() =>{});
+      // }
 
-      this.loadingOrders.push(order);
-      this.api.updateOrderStatus(order, targetList).subscribe({
-        next: () => {
-          this.orderService.emitOrderStatusChange(order);
-          this.loadingOrders = this.loadingOrders.filter(item => item._id !== order._id);
-          if (targetList === "ready") this.checkServedOnTime(order);
-        },
-        error: (error) => {
-          this.loadingOrders = this.loadingOrders.filter(item => item._id !== order._id);
-          console.log(error)
+      // this.loadingOrders.push(order);
+      // this.api.updateOrderStatus(order, targetList).subscribe({
+      //   next: () => {
+      //     this.orderService.emitOrderStatusChange(order);
+      //     this.loadingOrders = this.loadingOrders.filter(item => item._id !== order._id);
+      //     if (targetList === "ready") this.checkServedOnTime(order);
+      //   },
+      //   error: (error) => {
+      //     this.loadingOrders = this.loadingOrders.filter(item => item._id !== order._id);
+      //     console.log(error)
 
-          transferArrayItem(
-            event.container.data,
-            event.previousContainer.data,
-            event.currentIndex,
-            event.previousIndex
-          );
-        }
-      });
+      //     transferArrayItem(
+      //       event.container.data,
+      //       event.previousContainer.data,
+      //       event.currentIndex,
+      //       event.previousIndex
+      //     );
+      //   }
+      // });
     }
   }
 
